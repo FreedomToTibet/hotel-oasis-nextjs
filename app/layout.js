@@ -18,7 +18,7 @@ export const metadata = {
   description: 'The Hotel Oasis is the perfect place to relax and unwind.',
 };
 
-export default function RootLayout({children}) {
+export default function RootLayout({ children }) {
   return (
     <html lang="eng">
       <body
