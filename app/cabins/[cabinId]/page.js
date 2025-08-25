@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { EyeSlashIcon, MapPinIcon, UsersIcon } from "@heroicons/react/24/solid";
-import { getCabin } from "@/app/_lib/data-service";
+import { getCabin, getCabins } from "@/app/_lib/data-service";
 
 export async function generateMetadata({ params }) {
 	const { nameCabin, description } = await getCabin(params.cabinId);
@@ -9,6 +9,14 @@ export async function generateMetadata({ params }) {
 		title: `Cabin ${nameCabin}`,
 		description: description,
 	};
+}
+
+export async function generateStaticParams() {
+	const cabins = await getCabins();
+
+	return cabins.map((cabin) => ({
+		cabinId: String(cabin.id),
+	}));
 }
 
 export default async function Page({ params }) {
