@@ -25,8 +25,8 @@ export default async function Page({ params }) {
 
 	return (
 		<div className="max-w-6xl mx-auto mt-8">
-			<div className="grid grid-cols-[3fr_4fr] gap-20 border border-primary-800 py-3 px-10 mb-24">
-				<div className="relative scale-[1.15] -translate-x-3">
+			<div className="grid grid-cols-[3fr_4fr] items-start gap-20 border border-primary-800 py-3 px-10 mb-24">
+				<div className="relative aspect-[3/3] scale-[1.15] -translate-x-3 overflow-hidden">
 					<Image
 						src={cabin.image}
 						alt={`Cabin ${cabin.nameCabin}`}
@@ -42,9 +42,9 @@ export default async function Page({ params }) {
 						Cabin {cabin.nameCabin}
 					</h3>
 
-					<p className="text-lg text-primary-300 mb-10">
+					<div className="text-lg text-primary-300 mb-10 min-h-[96px]">
 						<TextExpander>{cabin.description}</TextExpander>
-					</p>
+					</div>
 
 					<ul className="flex flex-col gap-4 mb-7">
 						<li className="flex gap-3 items-center">
