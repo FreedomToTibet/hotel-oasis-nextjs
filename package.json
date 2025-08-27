@@ -15,7 +15,8 @@
     "date-fns": "^4.1.0",
     "next": "14.2.14",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "tailwind-scrollbar-hide": "^4.0.0"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.20",
