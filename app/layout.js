@@ -1,7 +1,5 @@
 import Header from '@/app/_components/Header';
-
 import '@/app/_styles/globals.css';
-
 import {Josefin_Sans} from 'next/font/google';
 
 const josefin = Josefin_Sans({
