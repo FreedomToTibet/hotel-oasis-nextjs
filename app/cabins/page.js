@@ -1,6 +1,7 @@
 import { Suspense } from "react";
 import Spinner from "@/app/_components/Spinner";
 import CabinsList from "@/app/_components/CabinsList";
+import Filter from "@/app/_components/Filter";
 
 export const revalidate = 86400;  // 24 hours
 
@@ -8,7 +9,8 @@ export const metadata = {
 	title: "Cabins",
 };
 
-export default function Page() {
+export default function Page({ searchParams }) {
+	const filter = searchParams?.capacity ?? "all";
 
 	return (
 		<div>
@@ -23,11 +25,16 @@ export default function Page() {
 				away from home. The perfect spot for a peaceful, calm vacation. Welcome
 				to paradise.
 			</p>
-			<Suspense fallback={<div className="grid items-center justify-center">
-				<Spinner />
-				<p className="text-xl text-primary-200">Loading cabin data...</p>
-			</div>}>
-				<CabinsList />
+			<div className="flex justify-end mb-5">
+				<Filter />
+			</div>
+			<Suspense fallback={
+				<div className="grid items-center justify-center" key={filter}>
+					<Spinner />
+					<p className="text-xl text-primary-200">Loading cabin data...</p>
+				</div>
+			}>
+				<CabinsList filter={filter} />
 			</Suspense>
 		</div>
 	);
