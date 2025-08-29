@@ -16,8 +16,9 @@ function isAlreadyBooked(range, datesArr) {
 
 function DateSelector({ settings, bookedDates, cabin }) {
 	// CHANGE
-	const regularPrice = cabin.price;
-	const discount = settings.discount;
+	
+	const regularPrice = cabin.regularPrice;
+	const discount = cabin.discount;
 	const numNights = 23;
 	const cabinPrice = regularPrice * numNights - discount;
 	const range = { from: null, to: null };
@@ -46,13 +47,13 @@ function DateSelector({ settings, bookedDates, cabin }) {
 					<p className="flex gap-2 items-baseline">
 						{discount > 0 ? (
 							<>
-								<span className="text-2xl">${regularPrice - discount}</span>
+								<span className="text-2xl">${(regularPrice - discount).toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ")}</span>
 								<span className="line-through font-semibold text-primary-700">
-									${regularPrice}
+									${regularPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ")}
 								</span>
 							</>
 						) : (
-							<span className="text-2xl">${regularPrice}</span>
+							<span className="text-2xl">${regularPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ")}</span>
 						)}
 						<span className="">/night</span>
 					</p>
@@ -63,7 +64,7 @@ function DateSelector({ settings, bookedDates, cabin }) {
 							</p>
 							<p>
 								<span className="text-lg font-bold uppercase">Total</span>{" "}
-								<span className="text-2xl font-semibold">${cabinPrice}</span>
+								<span className="text-2xl font-semibold">${cabinPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ")}</span>
 							</p>
 						</>
 					) : null}
