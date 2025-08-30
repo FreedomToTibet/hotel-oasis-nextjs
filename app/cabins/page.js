@@ -2,6 +2,7 @@ import { Suspense } from "react";
 import Spinner from "@/app/_components/Spinner";
 import CabinsList from "@/app/_components/CabinsList";
 import Filter from "@/app/_components/Filter";
+import ReservationReminder from "@/app/_components/ReservationReminder";
 
 export const revalidate = 86400;  // 24 hours
 
@@ -35,6 +36,7 @@ export default function Page({ searchParams }) {
 				</div>
 			}>
 				<CabinsList filter={filter} />
+				<ReservationReminder />
 			</Suspense>
 		</div>
 	);
