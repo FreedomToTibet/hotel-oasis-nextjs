@@ -1,8 +1,6 @@
 import { createClient } from "@supabase/supabase-js";
-import dotenv from "dotenv";
 
-dotenv.config();
-
+// Next.js automatically loads environment variables, so we don't need dotenv.config()
 const supabase = createClient(
   process.env.SUPABASE_URL,
   process.env.SUPABASE_KEY
