@@ -3,9 +3,17 @@ import { getCountries } from '@/app/_lib/data-service';
 // Let's imagine your colleague already built this component 😃
 
 async function SelectCountry({ defaultCountry, name, id, className }) {
+  // Get filtered countries from the data service
   const countries = await getCountries();
+  
+  // Sort countries alphabetically
+  const sortedCountries = [...countries].sort((a, b) => 
+    a.name.localeCompare(b.name)
+  );
+  
+  // Find the flag for the default country
   const flag =
-    countries.find((country) => country.name === defaultCountry)?.flag ?? '';
+    sortedCountries.find((country) => country.name === defaultCountry)?.flag ?? '';
 
   return (
     <select
@@ -16,7 +24,7 @@ async function SelectCountry({ defaultCountry, name, id, className }) {
       className={className}
     >
       <option value=''>Select country...</option>
-      {countries.map((c) => (
+      {sortedCountries.map((c) => (
         <option key={c.name} value={`${c.name}%${c.flag}`}>
           {c.name}
         </option>

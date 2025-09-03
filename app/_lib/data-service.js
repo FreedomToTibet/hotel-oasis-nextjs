@@ -137,13 +137,36 @@ export async function getSettings() {
   return data;
 }
 
+// List of countries to exclude from the dropdown
+const EXCLUDED_COUNTRIES = [
+  'Afghanistan',
+	'Belarus',
+	'Cuba',
+  'Korea (Democratic People\'s Republic of)',
+	'Iran (Islamic Republic of)',
+	'Palestine, State of',
+  'Russian Federation',
+  'Somalia',
+  'Sudan',
+  'Syria',
+  'Venezuela',
+  'Yemen',
+  // Add more countries to exclude as needed
+];
+
 export async function getCountries() {
   try {
     const res = await fetch(
       'https://restcountries.com/v2/all?fields=name,flag'
     );
-    const countries = await res.json();
-    return countries;
+    const allCountries = await res.json();
+    
+    // Filter out the excluded countries
+    const filteredCountries = allCountries.filter(
+      country => !EXCLUDED_COUNTRIES.includes(country.name)
+    );
+    
+    return filteredCountries;
   } catch {
     throw new Error('Could not fetch countries');
   }

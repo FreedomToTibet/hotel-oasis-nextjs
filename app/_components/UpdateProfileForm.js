@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import countryFlag from "@/public/pt.jpg";
+import { updateGuestProfile } from "@/app/_lib/actions";
 
 const metadata = {
 	title: "Update your profile",
@@ -9,21 +9,31 @@ const metadata = {
 		"Provide the following information to make your check-in process faster and smoother.",
 };
 
-export default function UpdateProfileForm({ children }) {
-	
+export default function UpdateProfileForm({ guest, children }) {
+	const { fullName, email, citizenship, citizenshipID, countryFlag } = guest;
+
 	return (
-		<form className="bg-primary-900 py-8 px-12 text-lg flex gap-6 flex-col">
+		<form
+			action={updateGuestProfile}
+			className="bg-primary-900 py-8 px-12 text-lg flex gap-6 flex-col"
+		>
         <div className="space-y-2">
-          <label>Full name</label>
+          <label htmlFor="fullName">Full name (as shown on ID)</label>
           <input
-            disabled
-            className="px-5 py-3 bg-primary-200 text-primary-800 w-full shadow-sm rounded-sm disabled:cursor-not-allowed disabled:bg-gray-600 disabled:text-gray-400"
+            defaultValue={fullName}
+            name="fullName"
+            id="fullName"
+            className="px-5 py-3 bg-primary-200 text-primary-800 w-full shadow-sm rounded-sm"
+            placeholder="Enter your legal full name"
           />
+          <p className="text-xs text-primary-300">Please enter your name exactly as it appears on your ID document</p>
         </div>
 
         <div className="space-y-2">
           <label>Email address</label>
           <input
+            defaultValue={email}
+            name="email"
             disabled
             className="px-5 py-3 bg-primary-200 text-primary-800 w-full shadow-sm rounded-sm disabled:cursor-not-allowed disabled:bg-gray-600 disabled:text-gray-400"
           />
@@ -31,21 +41,25 @@ export default function UpdateProfileForm({ children }) {
 
         <div className="space-y-2">
           <div className="flex items-center justify-between">
-            <label htmlFor="nationality">Where are you from?</label>
-            <Image
-              src={countryFlag}
-              alt="Country flag"
-              className="h-5 rounded-sm"
-							width={40}
-            />
+            <label htmlFor="citizenship">Where are you from?</label>
+            {countryFlag ? (
+              <Image
+                src={countryFlag}
+                alt="Country flag"
+                className="h-5 rounded-sm"
+                width={40}
+                height={20}
+              />
+            ) : null}
           </div>
 					{children}
         </div>
 
         <div className="space-y-2">
-          <label htmlFor="nationalID">National ID number</label>
+          <label htmlFor="citizenshipID">National ID number</label>
           <input
-            name="nationalID"
+						defaultValue={citizenshipID}
+            name="citizenshipID"
             className="px-5 py-3 bg-primary-200 text-primary-800 w-full shadow-sm rounded-sm"
           />
         </div>
