@@ -39,7 +39,7 @@ export async function updateGuestProfile(formData) {
   revalidatePath(`/account/profile`);
 }
 
-export async function DeleteReservation(bookingId) {
+export async function DeleteBookingReservation(bookingId) {
 	const session = await auth();
 	if (!session) {
 		throw new Error("Unauthorized");
