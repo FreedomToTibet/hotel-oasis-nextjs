@@ -2,7 +2,8 @@
 
 import { revalidatePath } from "next/cache";
 import { signIn, signOut, auth } from "@/app/_lib/auth";
-import { updateGuest, deleteBooking } from "@/app/_lib/data-service";
+import { updateGuest, deleteBooking, updateBooking, getBookings } from "@/app/_lib/data-service";
+import { redirect } from "next/navigation";
 
 export async function signInAction() {
   await signIn("google", { redirectTo: "/account" });
@@ -45,10 +46,10 @@ export async function DeleteBookingReservation(bookingId) {
 		throw new Error("Unauthorized");
 	}
 
-	const guestBookings = await getBookingsByGuestId(session.user.guestId);
-	const bookingIds = guestBookings.map(booking => booking.id);
+	const guestBookings = await getBookings(session.user.guestId);
+	const guestBookingsIds = guestBookings.map(booking => booking.id);
 
-	if (!bookingIds.includes(bookingId)) {
+	if (!guestBookingsIds.includes(bookingId)) {
 		throw new Error("You are not authorized to delete this reservation.");
 	}
 
@@ -57,4 +58,39 @@ export async function DeleteBookingReservation(bookingId) {
 
   // Revalidate the path to ensure the updated data is fetched
   revalidatePath(`/account/reservations`);
+}
+
+export async function updateBookingReservation(formData) {
+	const session = await auth();
+	if (!session) {
+		throw new Error("Unauthorized");
+	}
+
+	const bookingId = Number(formData.get("bookingId"));
+	const numberGuests = parseInt(formData.get("numberGuests"), 10);
+	const observations = formData.get("observations")?.trim().slice(0, 500) || "";
+
+	if (isNaN(numberGuests) || numberGuests < 1) {
+		throw new Error("Please provide a valid number of guests.");
+	}
+
+	const guestBookings = await getBookings(session.user.guestId);
+	const guestBookingsIds = guestBookings.map(booking => booking.id);
+
+	// Check if the booking belongs to the user, with proper type handling
+	const hasAccess = guestBookingsIds.some(id => 
+		(typeof id === 'number' && id === bookingId) || 
+		(typeof id === 'string' && id === bookingId)
+	);
+
+	if (!hasAccess) {
+		console.error("Authorization failed. User's bookings:", guestBookingsIds, "Requested booking:", bookingId);
+		throw new Error("You are not authorized to update this reservation.");
+	}
+
+	await updateBooking(bookingId, { numberGuests, observations });
+
+	// Revalidate the path to ensure the updated data is fetched
+	revalidatePath(`/account/reservation`);
+	redirect(`/account/reservation`);
 }
